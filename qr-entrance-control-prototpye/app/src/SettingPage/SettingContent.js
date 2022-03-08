@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import Settinginputs from "./SettingInputs";
 import SettingButtons from "./SettingButtons";
+import ErrorMessage from "./ErrorMessage";
 import { setAppID, setEventID, setServerInfo } from "../store/actions";
 
 import { connectWithSocketIOServer } from "../utils/wss";
@@ -14,21 +15,30 @@ const SettingContent = (props) => {
   const [appIdValue, setAppIdValue] = useState("");
   const [eventIdValue, setEventIdValue] = useState("");
   const [serverInfoValue, setServerInfoValue] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   let navigate = useNavigate();
+
+  const handleConnectionResult = (err) => {
+    if(err.length > 0) {
+      console.log(`error message : ${err}`);
+      setErrorMessage(err);
+      return;
+    }
+    
+    navigate("/control");
+  };
 
   const handleNext = () => {
     setSettings(appIdValue, eventIdValue, serverInfoValue);
 
-    connectWithSocketIOServer(serverInfoValue);
-
-    // change below after connection!
-    navigate("/control");
+    connectWithSocketIOServer(serverInfoValue, handleConnectionResult);
   };
 
   const handleReset = () => {
     setAppIdValue("");
     setEventIdValue("");
     setServerInfoValue("");
+    setErrorMessage("");
   };
 
   return (
@@ -44,6 +54,9 @@ const SettingContent = (props) => {
       <SettingButtons 
         handleNext={handleNext}
         handleReset={handleReset}
+      />
+      <ErrorMessage 
+        err={errorMessage}
       />
     </>
   );
