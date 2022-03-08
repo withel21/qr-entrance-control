@@ -38,7 +38,7 @@ const SettingInputs = (props) => {
         changeHandler={handleAppIdValueChange}
       />
       <Input
-        placeholder="Enter server info - (ipaddr):(service_port)"
+        placeholder="Enter server info - http://(ipaddr):(service_port)"
         value={serverInfoValue}
         changeHandler={handleServerInfoValueChange}
       />

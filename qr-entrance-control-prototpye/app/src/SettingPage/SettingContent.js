@@ -6,6 +6,8 @@ import Settinginputs from "./SettingInputs";
 import SettingButtons from "./SettingButtons";
 import { setAppID, setEventID, setServerInfo } from "../store/actions";
 
+import { connectWithSocketIOServer } from "../utils/wss";
+
 const SettingContent = (props) => {
   const { setSettings } = props;
 
@@ -15,8 +17,11 @@ const SettingContent = (props) => {
   let navigate = useNavigate();
 
   const handleNext = () => {
-    // TODO: 
     setSettings(appIdValue, eventIdValue, serverInfoValue);
+
+    connectWithSocketIOServer(serverInfoValue);
+
+    // change below after connection!
     navigate("/control");
   };
 
