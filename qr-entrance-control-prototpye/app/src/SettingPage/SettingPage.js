@@ -1,9 +1,11 @@
 import React from 'react';
+import SettingContent from './SettingContent';
 
-const SettingPage = () => {
+const SettingPage = (props) => {
   return (
     <div>
-      QR Entrance Setting page.
+      <p>QR Entrance Setting page.</p>
+      <SettingContent />
     </div>
   );
 };
