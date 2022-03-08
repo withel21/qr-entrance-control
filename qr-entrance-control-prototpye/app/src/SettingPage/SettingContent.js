@@ -1,18 +1,23 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-//import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Settinginputs from "./SettingInputs";
 import SettingButtons from "./SettingButtons";
+import { setAppID, setEventID, setServerInfo } from "../store/actions";
 
 const SettingContent = (props) => {
+  const { setSettings } = props;
+
   const [appIdValue, setAppIdValue] = useState("");
   const [eventIdValue, setEventIdValue] = useState("");
   const [serverInfoValue, setServerInfoValue] = useState("");
+  let navigate = useNavigate();
 
   const handleNext = () => {
     // TODO: 
-    
+    setSettings(appIdValue, eventIdValue, serverInfoValue);
+    navigate("/control");
   };
 
   const handleReset = () => {
@@ -45,5 +50,15 @@ const mapStoreStateToProps = (state) => {
   };
 };
 
-export default connect(mapStoreStateToProps)(SettingContent);
+const mapActionsToProps = (dispatch) => {
+  return {
+    setSettings: (appId, eventId, serverInfo) => { 
+      dispatch(setAppID(appId)); 
+      dispatch(setEventID(eventId));
+      dispatch(setServerInfo(serverInfo));
+    },
+  }
+}
+
+export default connect(mapStoreStateToProps, mapActionsToProps)(SettingContent);
 
