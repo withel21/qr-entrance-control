@@ -1,5 +1,5 @@
 import React from "react";
-import QRReaderStatus from "./QRReaderStatus";
+import QRReaderStatus from "../utils/QRReaderStatus";
 
 const CurrentStatus = ({qrReaderStatus, qrInfo}) => {
   const qrInfoText = (qrReaderStatus === QRReaderStatus.QR_READ_WAIT)? "Not yet READ" : JSON.stringify(qrInfo);

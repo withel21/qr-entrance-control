@@ -37,13 +37,13 @@ const QRHandlerManager = {
   getQrControlHandler: (token) => {
     const handler = QrControlHandlers.find(item => item.token === token);
   
-    return handler;
+    return handler ? handler.handler : null;
   },
   popQrControlHandler: (token) => {
     const handler = QrControlHandlers.find(item => item.token === token);
     QrControlHandlers = QrControlHandlers.filter(item => item.token !== token);
   
-    return handler;
+    return handler ? handler.handler : null;
   },
 
   setDefaultHandler: (command, handler = null) => { DefaultQrControlHandlers[command] = handler; },

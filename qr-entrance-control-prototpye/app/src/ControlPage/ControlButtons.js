@@ -1,5 +1,5 @@
 import React from "react";
-import QRReaderStatus from "./QRReaderStatus";
+import QRReaderStatus from "../utils/QRReaderStatus";
 
 const Button = ({buttonText, clickHandler}) => {
   return (

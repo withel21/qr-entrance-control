@@ -1,6 +1,5 @@
 const express = require("express");
 const http = require("http");
-const {v4 : uuid} = require("uuid");
 const cors = require("cors");
 const channelHandler = require("./channelHandler");
 

@@ -88,7 +88,10 @@ export const controlQRReader = (eventId, appId, targetQrStatus, message, respons
     eventId,
     appId,
     targetQrStatus,
-    message,
+    message: {
+      type: "text",     // for extenstion, e.g. url/text, url/img
+      value: message,
+    },
   };
 
   QRHandlerManager.registerQrControlHandler(token, responseHandler);
