@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">QREntranceReader</string>
+    <string name="toolbar_main_title">Setting</string>
+    <string name="main_setting_description_text">Fill in the information to set up QR Reader</string>
+    <string name="event_id">Event ID</string>
+    <string name="event_app_id">Event App ID</string>
+    <string name="qr_app_id">QR App ID</string>
+    <string name="socket_io_server_address">socket.io server address</string>
+    <string name="setting_and_start">START</string>
+</resources>

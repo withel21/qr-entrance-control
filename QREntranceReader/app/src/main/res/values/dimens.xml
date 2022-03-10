@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="toolbar_main_text_size">18sp</dimen>
+    <dimen name="main_setting_screen_marginTop">40dp</dimen>
+    <dimen name="main_setting_marginHorizontal">24dp</dimen>
+    <dimen name="main_setting_description_text_size">16sp</dimen>
+    <dimen name="main_setting_cardview_marginVertical">60dp</dimen>
+    <dimen name="cardview_elevation">12dp</dimen>
+    <dimen name="cardview_corner_radius">12dp</dimen>
+    <dimen name="cardview_content_layout_padding">16dp</dimen>
+    <dimen name="main_setting_tile_marginHorizontal">16dp</dimen>
+    <dimen name="et_text_size">16sp</dimen>
+    <dimen name="btn_text_size">18sp</dimen>
+    <dimen name="main_setting_btn_marginTop">28dp</dimen>
+    <dimen name="btn_paddingVertical">8dp</dimen>
+</resources>
