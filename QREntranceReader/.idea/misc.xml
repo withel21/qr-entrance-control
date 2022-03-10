@@ -4,7 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/shape_button_rounded.xml" value="0.201" />
+        <entry key="app/src/main/res/layout/activity_base.xml" value="0.16894630192502533" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16540020263424518" />
+        <entry key="app/src/main/res/layout/dialog_progress.xml" value="0.16894630192502533" />
       </map>
     </option>
   </component>

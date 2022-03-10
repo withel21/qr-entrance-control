@@ -13,4 +13,8 @@
     <dimen name="btn_text_size">18sp</dimen>
     <dimen name="main_setting_btn_marginTop">28dp</dimen>
     <dimen name="btn_paddingVertical">8dp</dimen>
+    <dimen name="progress_dialog_content_padding">12dp</dimen>
+    <dimen name="progress_bar_size">50dp</dimen>
+    <dimen name="progress_text_marginStart">16dp</dimen>
+    <dimen name="progress_text_size">16sp</dimen>
 </resources>

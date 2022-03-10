@@ -7,4 +7,5 @@
     <string name="qr_app_id">QR App ID</string>
     <string name="socket_io_server_address">socket.io server address</string>
     <string name="setting_and_start">START</string>
+    <string name="please_wait">Please Wait...</string>
 </resources>
