@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/dev_repos/qr-entrance-control/QREntranceReader/app/src/main/res/layout/activity_qrread.xml" value="0.17617753623188406" />
         <entry key="app/src/main/res/drawable/shape_button_rounded.xml" value="0.201" />
         <entry key="app/src/main/res/layout/activity_base.xml" value="0.16894630192502533" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16540020263424518" />
