@@ -1,6 +1,7 @@
 package com.example.qrentrancereader.activities
 
 import android.graphics.Color
+import android.hardware.Camera
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -36,7 +37,7 @@ class QRReadActivity : BaseActivity() {
                 // prevent duplicate scans
             }
         }
-        binding.barcodeScanner
+        binding.barcodeScanner.cameraSettings.requestedCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
         binding.barcodeScanner.resume()
     }
 

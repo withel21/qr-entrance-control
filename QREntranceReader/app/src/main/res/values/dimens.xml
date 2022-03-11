@@ -17,4 +17,9 @@
     <dimen name="progress_bar_size">50dp</dimen>
     <dimen name="progress_text_marginStart">16dp</dimen>
     <dimen name="progress_text_size">16sp</dimen>
+    <dimen name="reader_status_height">64dp</dimen>
+    <dimen name="qr_status_text_size">24sp</dimen>
+    <dimen name="qr_read_guide_margin">32dp</dimen>
+    <dimen name="qr_read_guide_padding">20dp</dimen>
+    <dimen name="qr_read_guide_text_size">20sp</dimen>
 </resources>

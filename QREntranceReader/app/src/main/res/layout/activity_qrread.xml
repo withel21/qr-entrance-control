@@ -7,48 +7,47 @@
     android:layout_height="match_parent"
     tools:context=".activities.QRReadActivity">
 
-    <com.journeyapps.barcodescanner.DecoratedBarcodeView
-        android:id="@+id/barcodeScanner"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_above="@+id/buttonsLayout"
-        android:layout_alignParentTop="true">
+        android:layout_below="@+id/statusLayout"
+        android:layout_alignParentBottom="true">
 
-    </com.journeyapps.barcodescanner.DecoratedBarcodeView>
+        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+            android:id="@+id/barcodeScanner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tvGuide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="@dimen/qr_read_guide_margin"
+            android:padding="@dimen/qr_read_guide_padding"
+            android:textStyle="bold"
+            android:background="@color/design_default_color_background"
+            android:textSize="@dimen/qr_read_guide_text_size"
+            android:text="@string/qr_read_guide_temporal_text"
+            android:visibility="invisible"/>
+    </FrameLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/buttonsLayout"
-        android:layout_toLeftOf="@+id/centerHorizont">
+        android:layout_alignParentTop="true"
+        android:id="@+id/statusLayout">
 
-        <Button
+        <TextView
+            android:id="@+id/tvStatus"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Pause"
-            android:onClick="pause" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Resume"
-            android:onClick="resume" />
+            android:layout_height="@dimen/reader_status_height"
+            android:textSize="@dimen/qr_status_text_size"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/primary_text_color"
+            android:text="@string/qr_status_default_text"/>
     </LinearLayout>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/centerHorizont" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/centerHorizont"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/buttonsLayout"
-        android:id="@+id/barcodePreview" />
 </RelativeLayout>

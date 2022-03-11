@@ -8,4 +8,6 @@
     <string name="socket_io_server_address">socket.io server address</string>
     <string name="setting_and_start">START</string>
     <string name="please_wait">Please Wait...</string>
+    <string name="qr_status_default_text">QR CODE READING</string>
+    <string name="qr_read_guide_temporal_text">GUIDE GUIDE GUIDE</string>
 </resources>
