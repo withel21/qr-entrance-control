@@ -5,10 +5,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.WindowManager
+import android.webkit.URLUtil
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.qrentrancereader.databinding.ActivityMainBinding
+import org.w3c.dom.Text
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -35,14 +38,40 @@ class MainActivity : BaseActivity() {
         val eventId: String = binding.etEventId.text.toString().trim { it <= ' ' }
         val eventAppId: String = binding.etEventAppId.text.toString().trim { it <= ' ' }
         val qrAppId: String = binding.etQRAppId.text.toString().trim { it <= ' '}
-        val serverAddres: String = binding.etServerAddress.text.toString().trim { it <= ' ' }
+        val serverAddress: String = binding.etServerAddress.text.toString().trim { it <= ' ' }
 
-        // TODO:
-
-        // Temporarily goto QRReadActivity
-        startActivity(Intent(this, QRReadActivity::class.java))
+        if(validateForm(eventId, eventAppId, qrAppId, serverAddress)) {
+            // TODO: socket io connect and check channel joinned
+            // Temporarily goto QRReadActivity
+            startActivity(Intent(this, QRReadActivity::class.java))
+        }
     }
 
+    private fun validateForm(eventId: String, eventAppId: String, qrAppId: String, serverAddress: String): Boolean {
+        return when {
+            TextUtils.isEmpty(eventId) -> {
+                showErrorSnackBar("Please enter an eventId")
+                false
+            }
+            TextUtils.isEmpty(eventAppId) -> {
+                showErrorSnackBar("Please enter an eventAppId")
+                false
+            }
+            TextUtils.isEmpty(qrAppId) -> {
+                showErrorSnackBar("Please enter a qrAppId")
+                false
+            }
+            TextUtils.isEmpty(serverAddress) -> {
+                showErrorSnackBar("Please enter a server address")
+                false
+            }
+            !URLUtil.isHttpUrl(serverAddress) and !URLUtil.isHttpsUrl(serverAddress) -> {
+                showErrorSnackBar("Please enter a server address with http or https")
+                false
+            }
+            else -> true
+        }
+    }
     private fun checkPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             showInfoSnackBar("You already have the permission for camera.")

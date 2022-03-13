@@ -16,4 +16,9 @@ object Constants {
         const val QR_READ_INFO: String = "Read Info"
         const val QR_READ_BLOCK: String = "Block Reader"
     }
+
+    const val EVENT_ID: String = "eventId"
+    const val EVENT_APP_ID: String = "eventAppId"
+    const val QRAPP_ID: String = "qrAppId"
+    const val SERVER_ADDR: String = "serverAddress"
 }
