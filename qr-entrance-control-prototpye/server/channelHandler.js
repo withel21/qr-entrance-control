@@ -12,6 +12,7 @@ const QRCntlCommand = {
 
 let connectedApps = [];
 let channels = [];
+let io = null;
 
 // socket.io handlers
 const createChannelHandler = (data, socket) => {
@@ -80,7 +81,7 @@ const joinChannelHandler = (data, socket) => {
     socket.emit(QRCntlCommand.ERROR, {
       token,
       command: QRCntlCommand.JOIN_CHANNEL,
-      message: `no event app connected for appId: ${targetAppId}, eventId: ${eventId}`,
+      message: `no event app connected for appId: ${eventAppId}, eventId: ${eventId}`,
     });
   }
 }
@@ -95,7 +96,7 @@ const controlQrReaderHandler = (data, socket) => {
     io.to(qrApp.socketId).emit(QRCntlCommand.CONTROL_QR_READER, data);
     socket.emit(QRCntlCommand, {token, eventId, appId, targetQrStatus});
   } else {
-    socket.emit(QRReaderStatus.ERROR, {
+    socket.emit(QRCntlCommand.ERROR, {
       token,
       command: QRCntlCommand.CONTROL_QR_READER,
       message: `no qr app connected for appId: ${appId}, eventId: ${eventId}`,
@@ -112,7 +113,7 @@ const qrStateUpdateHandler = (data, socket) => {
     io.to(eventApp.socketId).emit(QRCntlCommand.QR_STATUS_UPDATE, data);
     socket.emit(QRCntlCommand, {token, eventId, appId});
   } else {
-    socket.emit(QRReaderStatus.ERROR, {
+    socket.emit(QRCntlCommand.ERROR, {
       token,
       command: QRCntlCommand.QR_STATUS_UPDATE,
       message: `no event app connected for appId: ${appId}, eventId: ${eventId}`,
@@ -145,7 +146,7 @@ const leaveChannelHandler = (data, socket) => {
       }
     }
   } else {
-    socket.emit(QRReaderStatus.ERROR, {
+    socket.emit(QRCntlCommand.ERROR, {
       token,
       command: QRCntlCommand.LEAVE_CHANNEL,
       message: `not registered you(QRApp) appId: ${appId}, eventId: ${eventId}`,
@@ -176,14 +177,14 @@ const destroyChannelHandler = (data, socket) => {
       connectedApps = connectedApps.filter((app) => (app.appId !== appId || app.eventId !== eventId));
       channels = channels.filter((ch) => (ch.id !== channel.id));
     } else {
-      socket.emit(QRReaderStatus.ERROR, {
+      socket.emit(QRCntlCommand.ERROR, {
         token,
         command: QRCntlCommand.DESTROY_CHANNEL,
         message: `not registered you(EventApp) to any channel! - appId: ${appId}, eventId: ${eventId}`,
       });
     }
   } else {
-    socket.emit(QRReaderStatus.ERROR, {
+    socket.emit(QRCntlCommand.ERROR, {
       token,
       command: QRCntlCommand.DESTROY_CHANNEL,
       message: `not registered you(EventApp) - appId: ${appId}, eventId: ${eventId}`,
@@ -191,7 +192,8 @@ const destroyChannelHandler = (data, socket) => {
   }
 };
 
-const ioChannelHanlder = (io) => {
+const ioChannelHanlder = (sock_io) => {
+  io = sock_io;
   io.on('connection', (socket) => {
     console.log(`user connected ${socket.id}`);
 

@@ -1,6 +1,7 @@
 package com.example.qrentrancereader.utils
 
 import android.text.TextUtils
+import android.util.Log
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
@@ -28,9 +29,12 @@ class QRControlHandler(
         try {
             socket = IO.socket(serverAddress)
             socket.connect()
+            Log.d("QRCONTROLCHANNEL", "connnect try!")
         } catch(e: URISyntaxException) {
+            Log.d("QRCONTROLCHANNEL", e.toString())
             resultHandler.error(e.toString(), Constants.QRCntlCommand.JOIN_CHANNEL)
         } catch(e: Exception) {
+            Log.d("QRCONTROLCHANNEL", e.toString())
             resultHandler.error(e.toString(), Constants.QRCntlCommand.JOIN_CHANNEL)
         }
 
@@ -42,6 +46,19 @@ class QRControlHandler(
         socket.on(Constants.QRCntlCommand.LEAVE_CHANNEL, onLeaveChannel)
         socket.on(Constants.QRCntlCommand.DESTROY_CHANNEL, onDestroyChannel)
         socket.on(Constants.QRCntlCommand.ERROR, onError)
+        Log.d("QRCONTROLCHANNEL", "listener registered")
+    }
+
+    fun disconnect() {
+        if(socket.connected()) {
+            val data = JSONObject()
+
+            data.put("token", UUID.randomUUID().toString())
+            data.put("eventId", eventId)
+            data.put("appId", qrAppId)
+
+            socket.emit(Constants.QRCntlCommand.LEAVE_CHANNEL, data)
+        }
     }
 
     fun SendQrStatusChange(targetQrStatus: String, qrInfo: String = "") {
@@ -58,22 +75,24 @@ class QRControlHandler(
     }
 
     private val onConnect = Emitter.Listener {
-        val joinData = JSONObject()
-        joinData.put("token", UUID.randomUUID().toString())
-        joinData.put("eventId", eventId)
-        joinData.put("appId", eventAppId)
-        joinData.put( "eventAppId", eventAppId)
+        Log.d("QRCONTROLCHANNEL", "connnected - ${eventId}, ${eventAppId}, ${qrAppId}")
+        val data = JSONObject()
+        data.put("token", UUID.randomUUID().toString())
+        data.put("eventId", eventId)
+        data.put("appId", qrAppId)
+        data.put( "eventAppId", eventAppId)
 
-        socket.emit(Constants.QRCntlCommand.JOIN_CHANNEL, joinData)
+        socket.emit(Constants.QRCntlCommand.JOIN_CHANNEL, data)
+        Log.d("QRCONTROLCHANNEL", "join channel emit - ${eventId}, ${eventAppId}, ${qrAppId}")
     }
 
     private val onDisconnect = Emitter.Listener {
-        resultHandler.error("disconnected!!", Constants.QRCntlCommand.ERROR)
+        //resultHandler.error("disconnected!!", Constants.QRCntlCommand.ERROR)
     }
 
     private val onJoinChannel = Emitter.Listener { args ->
         val data = JSONObject(args[0].toString())
-
+        Log.d("QRCONTROLCHANNEL", "joined - ${eventId}, ${eventAppId}, ${qrAppId}")
         resultHandler.update(Constants.QRCntlCommand.JOIN_CHANNEL, Constants.QRReaderStatus.QR_READ_WAIT, "Ready to Read!")
     }
     private val onControlQRReader = Emitter.Listener { args ->
@@ -85,14 +104,19 @@ class QRControlHandler(
     private val onQRStatusUpdate = Emitter.Listener { args ->
         val data = JSONObject(args[0].toString())
 
+        Log.d("QRCONTROLCHANNEL", "QRStatusUpdate!!")
         // Just inform
         resultHandler.update(Constants.QRCntlCommand.QR_STATUS_UPDATE, "", "")
     }
     private val onLeaveChannel = Emitter.Listener {
         resultHandler.update(Constants.QRCntlCommand.LEAVE_CHANNEL, Constants.QRReaderStatus.QR_READ_BLOCK, "Service Closed!")
+
+        socket.disconnect()
     }
     private val onDestroyChannel = Emitter.Listener {
         resultHandler.update(Constants.QRCntlCommand.DESTROY_CHANNEL, Constants.QRReaderStatus.QR_READ_BLOCK, "Service Not Avail")
+
+        socket.disconnect()
     }
     private val onError = Emitter.Listener { args ->
         val data = JSONObject(args[0].toString())
