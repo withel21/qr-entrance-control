@@ -7,11 +7,13 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import com.example.qrentrancereader.databinding.ActivityQrreadBinding
+import com.example.qrentrancereader.utils.Constants
+import com.example.qrentrancereader.utils.QRControlResultHandler
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import java.util.*
 
-class QRReadActivity : BaseActivity() {
+class QRReadActivity : BaseActivity(), QRControlResultHandler {
     private lateinit var binding: ActivityQrreadBinding
     private var lastText = ""
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +30,7 @@ class QRReadActivity : BaseActivity() {
         binding.barcodeScanner.barcodeView.decoderFactory = DefaultDecoderFactory(formats)
         binding.barcodeScanner.initializeFromIntent(intent)
         binding.barcodeScanner.decodeContinuous { result ->
-            if( result.text != null && result.text.equals(lastText) == false) {
+            if (result.text != null && result.text.equals(lastText) == false) {
                 lastText = result.text;
                 binding.barcodeScanner.setStatusText(result.text)
 
@@ -58,6 +60,32 @@ class QRReadActivity : BaseActivity() {
                 //result.getBitmapWithResultPoints(Color.YELLOW) // possible to setImageBitmap to imageView
             } else {
                 // prevent duplicate scans
+            }
+        }
+    }
+
+    override fun error(msg: String, command: String) {
+        when(command) {
+            Constants.QRCntlCommand.JOIN_CHANNEL -> {}
+            Constants.QRCntlCommand.QR_STATUS_UPDATE -> {}
+            Constants.QRCntlCommand.CONTROL_QR_READER -> {}
+            else -> {}
+        }
+    }
+
+    override fun update(command: String, status: String, msg: String) {
+        when (command) {
+            Constants.QRCntlCommand.JOIN_CHANNEL -> {
+            }
+            Constants.QRCntlCommand.CONTROL_QR_READER -> {
+            }
+            Constants.QRCntlCommand.QR_STATUS_UPDATE -> {
+            }
+            Constants.QRCntlCommand.LEAVE_CHANNEL -> {
+            }
+            Constants.QRCntlCommand.DESTROY_CHANNEL -> {
+            }
+            else -> {
             }
         }
     }

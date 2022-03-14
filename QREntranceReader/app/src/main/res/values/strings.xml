@@ -10,4 +10,10 @@
     <string name="please_wait">Please Wait...</string>
     <string name="qr_status_default_text">QR CODE READING</string>
     <string name="qr_read_guide_temporal_text">GUIDE GUIDE GUIDE</string>
+
+    <string name="event_id_validation">Please enter an eventId</string>
+    <string name="event_app_id_validation">Please enter an eventAppId</string>
+    <string name="qr_app_id_validation">Please enter a qrAppId</string>
+    <string name="server_address_validation">Please enter a server address</string>
+    <string name="server_address_url_validation">Please enter a server address with http or https</string>
 </resources>
