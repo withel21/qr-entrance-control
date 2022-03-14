@@ -95,7 +95,7 @@ export const controlQRReader = (eventId, appId, targetQrStatus, message, respons
   };
 
   QRHandlerManager.registerQrControlHandler(token, responseHandler);
-  socket.emit(QRHandlerManager.CONTROL_QR_READER, data);
+  socket.emit(QRCntlCommand.CONTROL_QR_READER, data);
 };
 
 export const destroyChannel = (eventId, appId) => {
@@ -106,6 +106,6 @@ export const destroyChannel = (eventId, appId) => {
     appId,
   };
 
-  socket.emit(QRHandlerManager.DESTROY_CHANNEL, data);
+  socket.emit(QRCntlCommand.DESTROY_CHANNEL, data);
 };
 

@@ -50,7 +50,7 @@ const createChannelHandler = (data, socket) => {
 const joinChannelHandler = (data, socket) => {
   console.log(`channel joined from ${socket.id}`);
   console.log(data);
-  const { token, eventId, appId, eventAppId, qrStatus } = data;
+  const { token, eventId, appId, eventAppId } = data;
 
   const eventApp = connectedApps.find((app) => (app.type === "EventApp" && app.eventId === eventId && app.appId === eventAppId));
   if (eventApp) {
@@ -72,12 +72,14 @@ const joinChannelHandler = (data, socket) => {
     channel.connectedApps = [...channel.connectedApps, qrApp];
 
     const joinResponseMessage = {
-      token, eventId, appId, chennelId: channel.id,
+      token, eventId, appId, eventAppId, chennelId: channel.id,
     };
 
     io.to(eventApp.socketId).emit(QRCntlCommand.JOIN_CHANNEL, joinResponseMessage);
     socket.emit(QRCntlCommand.JOIN_CHANNEL, joinResponseMessage);
   } else {
+    console.log(`no event app connected for appId: ${eventAppId}, eventId: ${eventId}`);
+    console.log(connectedApps);
     socket.emit(QRCntlCommand.ERROR, {
       token,
       command: QRCntlCommand.JOIN_CHANNEL,
@@ -94,7 +96,7 @@ const controlQrReaderHandler = (data, socket) => {
   const qrApp = connectedApps.find((app) => (app.eventId === eventId && app.targetAppId === appId && app.type === "QRApp"));
   if(qrApp) {
     io.to(qrApp.socketId).emit(QRCntlCommand.CONTROL_QR_READER, data);
-    socket.emit(QRCntlCommand, {token, eventId, appId, targetQrStatus});
+    socket.emit(QRCntlCommand.CONTROL_QR_READER, {token, eventId, appId, targetQrStatus});
   } else {
     socket.emit(QRCntlCommand.ERROR, {
       token,
@@ -107,11 +109,11 @@ const controlQrReaderHandler = (data, socket) => {
 const qrStateUpdateHandler = (data, socket) => {
   console.log(`qr status update from ${socket.id}`);
   console.log(data);
-  const { token, eventId, appId } = data;
+  const { token, eventId, appId, state } = data;
   const eventApp = connectedApps.find((app) => (app.eventId === eventId && app.targetAppId === appId && app.type === "EventApp"));
   if(eventApp) {
     io.to(eventApp.socketId).emit(QRCntlCommand.QR_STATUS_UPDATE, data);
-    socket.emit(QRCntlCommand, {token, eventId, appId});
+    socket.emit(QRCntlCommand.QR_STATUS_UPDATE, {token, eventId, appId, state});
   } else {
     socket.emit(QRCntlCommand.ERROR, {
       token,

@@ -12,21 +12,33 @@ const ControlContent = (props) => {
   const [qrReaderStatus, setQrReaderStatus] = useState(QRReaderStatus.QR_READ_WAIT);
   const [qrInfoValue, setQrInfoValue] = useState("");
   const [historyValue, setHistoryValue] = useState([]);
+  const [qrAppId, setQrAppId] = useState("");
   const { appId, eventId } = props;
-
+  
   const createChannelResponseHandler = (eId, aId, data) => {
     console.log(`channel created!`);
   };
+  const joinChannelResponseHandler = (eId, aId, data) => {
+    console.log("join from " + data.appId);
+    console.log(data);
+    if(data.eventId === eId && data.eventAppId === aId) {
+      setQrAppId(data.appId);
+    }
+  }
   const controlQRReaderResponseHandler = (eId, aId, data) => {
     console.log(`control QR reader message are sent! wait for QR reader status update!`);
-  };
+  };  
   const qrStatusUpdateResponseHandler = (eId, aId, data) => {
-    if(data.eventId === eId && data.aId === appId) {
-      setQrReaderStatus(data.state);
+    console.log("qr status from " + data.appId + " qrAppId = " + qrAppId);
+    console.log(data);
+    if(data.eventId === eId) {
+      const preQrReaderStatus = qrReaderStatus;      
 
-      if(data.state === QRReaderStatus.QR_READ_INFO) {
+      if(data.state === QRReaderStatus.QR_READ_INFO && preQrReaderStatus !== QRReaderStatus.QR_READ_INFO) {
         setQrInfoValue(data.qrInfo);
+        controlQRReader(eventId, appId, data.state, getMessageTemplateByStatus(data.state), controlQRReader);
       }
+      setQrReaderStatus(data.state);
     }
   };
 
@@ -52,13 +64,16 @@ const ControlContent = (props) => {
   };
 
   useEffect(() => {
+
     setDefaultInboundingHandler(defaultHandler);
+    QRHandlerManager.loadDefaultHandler();
     QRHandlerManager.setDefaultHandler(QRCntlCommand.CREATE_CHANNEL, createChannelResponseHandler);
     QRHandlerManager.setDefaultHandler(QRCntlCommand.CONTROL_QR_READER, controlQRReaderResponseHandler);
     QRHandlerManager.setDefaultHandler(QRCntlCommand.QR_STATUS_UPDATE, qrStatusUpdateResponseHandler);
+    QRHandlerManager.setDefaultHandler(QRCntlCommand.JOIN_CHANNEL, joinChannelResponseHandler);
 
     createChannel(eventId, appId, createChannelResponseHandler);
-  });
+  }, []);
 
   return (
     <div>

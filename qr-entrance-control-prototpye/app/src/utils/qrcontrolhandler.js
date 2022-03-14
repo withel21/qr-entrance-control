@@ -11,7 +11,7 @@ const DefaultQrControlHandlers = {};
 
 // command : 'join-channel'
 const defaultJoinChannelHandler = (eventId, appId, inboundData) => {
-  console.log(`QR reader['${inboundData.appId}] is joined! - data : ${inboundData}`);  
+  console.log(`QR reader['${inboundData.appId}'] is joined! - data : ${inboundData}`);  
 };
 
 // command : 'leave-channel'

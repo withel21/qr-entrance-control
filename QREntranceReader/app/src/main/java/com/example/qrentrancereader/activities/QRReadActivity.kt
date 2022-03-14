@@ -42,8 +42,9 @@ class QRReadActivity : BaseActivity(), QRControlResultHandler {
         binding.barcodeScanner.decodeContinuous { result ->
             if (result.text != null && result.text.equals(lastText) == false) {
                 lastText = result.text;
-                binding.barcodeScanner.setStatusText(result.text)
+                //binding.barcodeScanner.setStatusText(result.text)
 
+                qrControlHandler.SendQrStatusChange(Constants.QRReaderStatus.QR_READ_INFO, lastText)
                 //result.getBitmapWithResultPoints(Color.YELLOW) // possible to setImageBitmap to imageView
             } else {
                 // prevent duplicate scans
@@ -92,68 +93,78 @@ class QRReadActivity : BaseActivity(), QRControlResultHandler {
     }
 
     override fun error(msg: String, command: String) {
-        hideProgressDialog()
-        when(command) {
-            Constants.QRCntlCommand.JOIN_CHANNEL -> {
-                showProgressDialog( if(TextUtils.isEmpty(msg)) "Fail to connect to server" else msg)
+        runOnUiThread {
+            hideProgressDialog()
+            when (command) {
+                Constants.QRCntlCommand.JOIN_CHANNEL -> {
+                    showProgressDialog(if (TextUtils.isEmpty(msg)) "Fail to connect to server" else msg)
+                }
+                Constants.QRCntlCommand.QR_STATUS_UPDATE -> {
+                    showProgressDialog(if (TextUtils.isEmpty(msg)) "Fail to report qr status" else msg)
+                }
+                Constants.QRCntlCommand.CONTROL_QR_READER -> {
+                }
+                else -> {
+                    showProgressDialog(msg)
+                }
             }
-            Constants.QRCntlCommand.QR_STATUS_UPDATE -> {
-                showProgressDialog(if(TextUtils.isEmpty(msg)) "Fail to report qr status" else msg)
-            }
-            Constants.QRCntlCommand.CONTROL_QR_READER -> {
-                showProgressDialog(if(TextUtils.isEmpty(msg)) "Problem in qr status control command" else msg)
-            }
-            else -> {
-                showProgressDialog(msg)
-            }
+            setTimerForProgress()
         }
-        setTimerForProgress()
     }
 
     override fun update(command: String, status: String, msg: String) {
-        when (command) {
-            Constants.QRCntlCommand.JOIN_CHANNEL -> {
-                hideProgressDialog()
-                resume()
-                qrControlHandler.SendQrStatusChange(Constants.QRReaderStatus.QR_READ_WAIT)
-            }
-            Constants.QRCntlCommand.CONTROL_QR_READER -> {
-                binding.tvStatus.text = status
-                when(status) {
-                    Constants.QRReaderStatus.QR_READ_BLOCK -> {
-                        binding.tvGuide.visibility = View.VISIBLE
-                        binding.tvGuide.text = msg
-                    }
-                    else -> {
-                        if(TextUtils.isEmpty(msg)) {
-                            binding.tvGuide.visibility = View.INVISIBLE
-                        } else {
+        runOnUiThread {
+            when (command) {
+                Constants.QRCntlCommand.JOIN_CHANNEL -> {
+                    hideProgressDialog()
+                    resume()
+                    qrControlHandler.SendQrStatusChange(Constants.QRReaderStatus.QR_READ_WAIT)
+                }
+                Constants.QRCntlCommand.CONTROL_QR_READER -> {
+                    binding.tvStatus.text = status
+                    when (status) {
+                        Constants.QRReaderStatus.QR_READ_BLOCK -> {
                             binding.tvGuide.visibility = View.VISIBLE
                             binding.tvGuide.text = msg
+                        }
+                        else -> {
+                            if (TextUtils.isEmpty(msg)) {
+                                binding.tvGuide.visibility = View.INVISIBLE
+                            } else {
+                                binding.tvGuide.visibility = View.VISIBLE
+                                binding.tvGuide.text = msg
+                                setTimerForGuide()
+                            }
+                        }
+                    }
+                    qrControlHandler.SendQrStatusChange(status)
+                }
+                Constants.QRCntlCommand.QR_STATUS_UPDATE -> {
+                    // Nothing to do. but just check if status is the same as current
+                    if(!TextUtils.isEmpty(status)) {
+                        binding.tvStatus.text = status
+                    }
+                    when (status) {
+                        Constants.QRReaderStatus.QR_READ_WAIT -> {
+                            resume()
                             setTimerForGuide()
+                        }
+                        else -> {
+                            pause()
                         }
                     }
                 }
-                qrControlHandler.SendQrStatusChange(status)
-            }
-            Constants.QRCntlCommand.QR_STATUS_UPDATE -> {
-                // Nothing to do. but just check if status is the same as current
-                binding.tvStatus.text = status
-                when(status) {
-                    Constants.QRReaderStatus.QR_READ_WAIT -> { binding.barcodeScanner.resume() }
-                    else -> { binding.barcodeScanner.pause() }
+                Constants.QRCntlCommand.LEAVE_CHANNEL -> {
+                    showProgressDialog("Leaving Service...")
+                    setTimerForProgress()
                 }
-            }
-            Constants.QRCntlCommand.LEAVE_CHANNEL -> {
-                showProgressDialog("Leaving Service...")
-                setTimerForProgress()
-            }
-            Constants.QRCntlCommand.DESTROY_CHANNEL -> {
-                showProgressDialog("Operation Control Disconnected!")
-                setTimerForProgress()
-            }
-            else -> {
-                // IGNORE!?
+                Constants.QRCntlCommand.DESTROY_CHANNEL -> {
+                    showProgressDialog("Operation Control Disconnected!")
+                    setTimerForProgress()
+                }
+                else -> {
+                    // IGNORE!?
+                }
             }
         }
     }
@@ -172,7 +183,7 @@ class QRReadActivity : BaseActivity(), QRControlResultHandler {
 
     private fun setTimerForProgress(sec: Long = 3) {
         progressBarTimer?.cancel()
-        progressBarTimer = object : CountDownTimer(sec * 1000, sec * 1000) {
+        progressBarTimer = object : CountDownTimer(sec * 1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
 
             }
@@ -190,14 +201,14 @@ class QRReadActivity : BaseActivity(), QRControlResultHandler {
 
     private fun setTimerForGuide(sec: Long = 3) {
         guideTimer?.cancel()
-        guideTimer = object : CountDownTimer(sec * 1000, sec * 1000) {
+        guideTimer = object : CountDownTimer(sec * 1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
 
             }
 
             override fun onFinish() {
-                guideTimer = null
                 binding.tvGuide.visibility = View.INVISIBLE
+                guideTimer = null
             }
         }
     }

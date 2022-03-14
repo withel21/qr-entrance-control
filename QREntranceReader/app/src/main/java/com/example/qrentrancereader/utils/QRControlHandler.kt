@@ -65,7 +65,7 @@ class QRControlHandler(
         val data = JSONObject()
         data.put("token", UUID.randomUUID().toString())
         data.put("eventId", eventId)
-        data.put("appId", eventAppId)
+        data.put("appId", qrAppId)
         data.put("state", targetQrStatus)
         if(!TextUtils.isEmpty(qrInfo)) {
             data.put("qrInfo", qrInfo)
@@ -80,7 +80,7 @@ class QRControlHandler(
         data.put("token", UUID.randomUUID().toString())
         data.put("eventId", eventId)
         data.put("appId", qrAppId)
-        data.put( "eventAppId", eventAppId)
+        data.put("eventAppId", eventAppId)
 
         socket.emit(Constants.QRCntlCommand.JOIN_CHANNEL, data)
         Log.d("QRCONTROLCHANNEL", "join channel emit - ${eventId}, ${eventAppId}, ${qrAppId}")
@@ -99,6 +99,8 @@ class QRControlHandler(
         val data = JSONObject(args[0].toString())
         val message = data.getJSONObject("message")
 
+        Log.d("QRCONTROLCHANNEL", "Control QR Reader!! = ${data.getString("targetQrStatus")}, msg = ${message.getString("value")}")
+
         resultHandler.update(Constants.QRCntlCommand.CONTROL_QR_READER, data.getString("targetQrStatus"), message.getString("value"))
     }
     private val onQRStatusUpdate = Emitter.Listener { args ->
@@ -106,7 +108,7 @@ class QRControlHandler(
 
         Log.d("QRCONTROLCHANNEL", "QRStatusUpdate!!")
         // Just inform
-        resultHandler.update(Constants.QRCntlCommand.QR_STATUS_UPDATE, "", "")
+        resultHandler.update(Constants.QRCntlCommand.QR_STATUS_UPDATE, data.getString("state"), "")
     }
     private val onLeaveChannel = Emitter.Listener {
         resultHandler.update(Constants.QRCntlCommand.LEAVE_CHANNEL, Constants.QRReaderStatus.QR_READ_BLOCK, "Service Closed!")
