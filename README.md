@@ -1,12 +1,10 @@
 # Project : qr-entrance-control
-----
 - Project for QR code entrance control
   - QR code reader on mobile(android) : controlled by web interface.(especially socket.io)
   - web interface : developed by react as a prototype => No UI/UX considered
   - socket.io server : developed by Node.js -> No data validation is done
 
 # Source Code Structure Overview
----
 - QR Code Reader
   - QREntranceReader
   - execution : with AndroidStudio
