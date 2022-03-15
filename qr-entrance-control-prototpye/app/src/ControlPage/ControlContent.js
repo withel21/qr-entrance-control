@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import QRHandlerManager from "../utils/qrcontrolhandler";
-import { controlQRReader, createChannel, setDefaultInboundingHandler } from "../utils/wss";
+import { controlQRReader, createChannel, destroyChannel, sendError, setDefaultInboundingHandler } from "../utils/wss";
 import ControlButtons from "./ControlButtons";
 import ControlHistory from "./ControlHistory";
 import CurrentStatus from "./CurrentStatus";
-import QRReaderStatus, { getMessageTemplateByStatus, QRMessageMode } from "../utils/QRReaderStatus";
+import QRReaderStatus, { getMessageTemplateByStatus } from "../utils/QRReaderStatus";
 import QRCntlCommand from "../utils/qrcontrolcommand";
 
 const ControlContent = (props) => {
@@ -24,12 +24,13 @@ const ControlContent = (props) => {
     if(data.eventId === eId && data.eventAppId === aId) {
       setQrAppId(data.appId);
     }
+    controlQRReader(eventId, appId, QRReaderStatus.QR_READ_WAIT, getMessageTemplateByStatus(QRReaderStatus.QR_READ_WAIT), controlQRReader);
   }
   const controlQRReaderResponseHandler = (eId, aId, data) => {
     console.log(`control QR reader message are sent! wait for QR reader status update!`);
   };  
   const qrStatusUpdateResponseHandler = (eId, aId, data) => {
-    console.log("qr status from " + data.appId + " qrAppId = " + qrAppId);
+    console.log("qr status from " + data.appId + " qrAppId = " + qrAppId + ", data.state = " + data.state + ", qrReaderStatus = " + qrReaderStatus);
     console.log(data);
     if(data.eventId === eId) {
       const preQrReaderStatus = qrReaderStatus;      
@@ -42,15 +43,16 @@ const ControlContent = (props) => {
     }
   };
 
-  const controlButtonHanlder = (qrStatus) => {
+  const controlButtonHanlder = (qrStatus, error) => {
     const now = new Date();
     const historyItem = `${now.toGMTString()} : move to "${qrStatus}"`;
     
+    if(error) {
+      sendError(eventId, appId, error.command, error.message);
+    }
     setHistoryValue([historyItem, ...historyValue]);
-    // ADMITTED -> BLOCK can be??
-    const message = getMessageTemplateByStatus( qrStatus, (qrStatus === QRReaderStatus.QR_READ_BLOCK)? QRMessageMode.ADMITTED : "" );
+    const message = getMessageTemplateByStatus( qrStatus);
     controlQRReader(eventId, appId, qrStatus, message, controlQRReaderResponseHandler);
-    //setQrReaderStatus(qrStatus);
   };
 
   const defaultHandler = (command, data) => {
@@ -73,11 +75,16 @@ const ControlContent = (props) => {
     QRHandlerManager.setDefaultHandler(QRCntlCommand.JOIN_CHANNEL, joinChannelResponseHandler);
 
     createChannel(eventId, appId, createChannelResponseHandler);
+
+    return () => {
+      destroyChannel(eventId, appId);
+    };
   }, []);
 
   return (
     <div>
       <CurrentStatus 
+        qrAppId={qrAppId}
         qrReaderStatus={qrReaderStatus}
         qrInfo={qrInfoValue}
       />

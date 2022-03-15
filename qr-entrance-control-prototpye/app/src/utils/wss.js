@@ -109,3 +109,13 @@ export const destroyChannel = (eventId, appId) => {
   socket.emit(QRCntlCommand.DESTROY_CHANNEL, data);
 };
 
+export const sendError = (eventId, appId, command, message) => {
+  const token = uuid(); 
+  socket.emit(QRCntlCommand.ERROR, {
+    token,
+    eventId,
+    appId,
+    command: command,
+    message,
+  });
+};

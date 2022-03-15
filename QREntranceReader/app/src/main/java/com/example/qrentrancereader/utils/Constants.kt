@@ -14,7 +14,8 @@ object Constants {
     object QRReaderStatus {
         const val QR_READ_WAIT: String = "Read Wait"
         const val QR_READ_INFO: String = "Read Info"
-        const val QR_READ_BLOCK: String = "Block Reader"
+        const val QR_READ_BLOCK: String = "On Shooting"
+        const val QR_ENTRANCE_ADMIT: String = "Entrance Admitted"
     }
 
     const val EVENT_ID: String = "eventId"

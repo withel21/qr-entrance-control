@@ -82,6 +82,8 @@ const joinChannelHandler = (data, socket) => {
     console.log(connectedApps);
     socket.emit(QRCntlCommand.ERROR, {
       token,
+      eventId,
+      appId,
       command: QRCntlCommand.JOIN_CHANNEL,
       message: `no event app connected for appId: ${eventAppId}, eventId: ${eventId}`,
     });
@@ -117,6 +119,8 @@ const qrStateUpdateHandler = (data, socket) => {
   } else {
     socket.emit(QRCntlCommand.ERROR, {
       token,
+      eventId,
+      appId,
       command: QRCntlCommand.QR_STATUS_UPDATE,
       message: `no event app connected for appId: ${appId}, eventId: ${eventId}`,
     });
@@ -150,6 +154,8 @@ const leaveChannelHandler = (data, socket) => {
   } else {
     socket.emit(QRCntlCommand.ERROR, {
       token,
+      eventId,
+      appId,
       command: QRCntlCommand.LEAVE_CHANNEL,
       message: `not registered you(QRApp) appId: ${appId}, eventId: ${eventId}`,
     });
@@ -168,7 +174,6 @@ const destroyChannelHandler = (data, socket) => {
       const qrApp = connectedApps.find((app) => (app.eventId === eventId && app.targetAppId === appId && app.type === "QRApp"));
       qrApp.targetAppId = "";
       io.to(qrApp.socketId).emit(QRCntlCommand.DESTROY_CHANNEL, data);
-      if(channel) { io.to(qrApp.socketId).leave(channel.id); }
       connectedApps = connectedApps.filter((app) => (app.appId !== qrApp.appId || app.eventId !== qrApp.eventId));
     }
 
@@ -188,9 +193,23 @@ const destroyChannelHandler = (data, socket) => {
   } else {
     socket.emit(QRCntlCommand.ERROR, {
       token,
+      eventId,
+      appId,
       command: QRCntlCommand.DESTROY_CHANNEL,
       message: `not registered you(EventApp) - appId: ${appId}, eventId: ${eventId}`,
     });
+  }
+};
+
+const errorHandler = (data, socket) => {
+  console.log(`channel destroyed from ${socket.id}`);
+  console.log(data);
+  const {token, eventId, appId} = data;
+
+  const peerApp = connectedApps.find((app) => (app.eventId === eventId && app.targetAppId === appId));
+  const channel = channels.find((ch) => (ch.id === peerApp.channelId));
+  if(peerApp) {
+    io.to(peerApp.socketId).emit(QRCntlCommand.ERROR, data);
   }
 };
 
@@ -221,6 +240,10 @@ const ioChannelHanlder = (sock_io) => {
 
     socket.on(QRCntlCommand.DESTROY_CHANNEL, (data) => {
       destroyChannelHandler(data, socket);
+    });
+
+    socket.on(QRCntlCommand.ERROR, (data) => {
+      errorHandler(data, socket);
     });
   });
 };

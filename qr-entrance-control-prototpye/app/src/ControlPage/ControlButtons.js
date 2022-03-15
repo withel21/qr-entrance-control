@@ -16,34 +16,47 @@ const ControlButtons = ({qrStatus, clickHandler}) => {
     clickHandler(QRReaderStatus.QR_READ_WAIT);
   };
 
-  const handlerForQRReadInfo = () => {
-    clickHandler(QRReaderStatus.QR_READ_INFO);
+  const handlerForQREntranceAdmit = () => {
+    clickHandler(QRReaderStatus.QR_ENTRANCE_ADMIT);
   };
 
   const handlerForQRReadBlock = () => {
     clickHandler(QRReaderStatus.QR_READ_BLOCK);
   };
 
-  const targetHandler = (qrStatus === QRReaderStatus.QR_READ_INFO) ? handlerForQRReadBlock : handlerForQRReadWait;
+  const handlerForDrop = () => {
+    clickHandler(QRReaderStatus.QR_READ_WAIT, { command: QRReaderStatus.QR_READ_WAIT, message: "Admission Denied! Please check your QR code." })
+  };
+
+  const targetHandler = () => {
+    switch(qrStatus) {
+      case QRReaderStatus.QR_READ_INFO: return handlerForQREntranceAdmit;
+      case QRReaderStatus.QR_ENTRANCE_ADMIT: return handlerForQRReadBlock;
+      case QRReaderStatus.QR_READ_BLOCK: return handlerForQRReadWait;
+      default: return null;
+    }
+  };
+  const getButtonText = () => {
+    switch(qrStatus) {
+      case QRReaderStatus.QR_READ_INFO: return "Admit Entrance";
+      case QRReaderStatus.QR_ENTRANCE_ADMIT: return "On Shooting";
+      case QRReaderStatus.QR_READ_BLOCK: return "Next Fan Wait";
+      default: return "";
+    }
+  };
 
   return (
     <div>
       { qrStatus !== QRReaderStatus.QR_READ_WAIT && (
         <Button
-          buttonText={buttonText}
-          clickHandler={targetHandler}
+          buttonText={getButtonText()}
+          clickHandler={targetHandler()}
         />
       )}
-      { qrStatus === QRReaderStatus.QR_READ_INFO && (
+      { qrStatus !== QRReaderStatus.QR_READ_WAIT && (
         <Button 
-          buttonText="Ignore"
-          clickHandler={handlerForQRReadWait}
-        />
-      )}
-      { qrStatus === QRReaderStatus.QR_READ_WAIT && (
-        <Button
-          buttonText="Debug(Go to read info)"
-          clickHandler={handlerForQRReadInfo}
+          buttonText="Drop"
+          clickHandler={(qrStatus == QRReaderStatus.QR_READ_INFO) ? handlerForDrop : handlerForQRReadWait}
         />
       )}
     </div>

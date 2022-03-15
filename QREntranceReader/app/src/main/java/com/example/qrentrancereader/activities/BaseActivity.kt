@@ -26,17 +26,19 @@ open class BaseActivity : AppCompatActivity() {
         progressDialog.dismiss()
     }
 
-    fun showErrorSnackBar(message: String) {
+    fun showErrorSnackBar(message: String, callback: Snackbar.Callback? = null) {
         val snackBar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
         val snackBarView = snackBar.view
         snackBarView.setBackgroundColor(ContextCompat.getColor(this, R.color.snackbar_error_color))
+        snackBar.addCallback(callback)
         snackBar.show()
     }
 
-    fun showInfoSnackBar(message: String) {
+    fun showInfoSnackBar(message: String, callback: Snackbar.Callback? = null) {
         val snackBar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
         val snackBarView = snackBar.view
         snackBarView.setBackgroundColor(ContextCompat.getColor(this, R.color.snackbar_info_color))
+        snackBar.addCallback(callback)
         snackBar.show()
     }
 }
