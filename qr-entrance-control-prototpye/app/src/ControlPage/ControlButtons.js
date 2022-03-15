@@ -10,8 +10,6 @@ const Button = ({buttonText, clickHandler}) => {
 };
 
 const ControlButtons = ({qrStatus, clickHandler}) => {
-  const buttonText = (qrStatus === QRReaderStatus.QR_READ_INFO) ? "Admit Entrance" : "Open QR Reader";
-  
   const handlerForQRReadWait = () => {
     clickHandler(QRReaderStatus.QR_READ_WAIT);
   };
