@@ -1,7 +1,7 @@
 ## Project : qr-entrance-control
 - Project for QR code entrance control
   - QR code reader on mobile(android) <- MAIN : controlled by web interface.(socket.io)
-  - web interface : developed by react as a prototype => No UI/UX considered
+  - web interface : developed by react as a prototype -> No UI/UX considered
   - socket.io server : developed by Node.js -> No data validation is done
 
 ## Source Code Structure Overview
@@ -20,11 +20,11 @@
   - Reference to detach module to extend the feature from the source code
     - socket handlers : [qr-entrance-control-prototype/server/channelHandler.js](https://github.com/withel21/qr-entrance-control/blob/main/qr-entrance-control-prototpye/server/channelHandler.js)
 
-## User Flow
+## Use Flow
 ### 1. Execute the prototype of QR entrace server
 ### 2. Execute the prototype of QR entrance monitor/control web-app
 ### 3. Set information on web-app with below items and then click `Next` 
-  - Event ID : the identification string of one event to need QR entrance
+  - Event ID : the identification string for one event to need QR entrance control
   - app ID : QR entrance/control web-app's identity(string)
   - server address : `http://(prototypeserveraddress):5002`
 ### 4. Execute QR Code Reader on android mobile phone
@@ -38,8 +38,8 @@
   - QR Code Reader waits the QR code input
   - There are four modes
     - *QR_READ_WAIT*
-      - QR code reader : waits QR code input
-      - web app : just wait QR code
+      - QR code reader : wait QR code input
+      - web app : just wait QR code result from QR code reader
     - *QR_READ_INFO*
       - QR code reader : read QR code, present admission waiting message, transfer the decoded result to web-app via socket-io server and stop reading QR code
       - web app : QR result is presented and control QR code reader to go to *QR_ENTRANCE_ADMIT* by clicking "Admit Entrance" or *QR_READ_WAIT* by clicking "Drop"
