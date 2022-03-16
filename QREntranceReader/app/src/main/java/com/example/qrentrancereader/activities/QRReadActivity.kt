@@ -1,14 +1,10 @@
 package com.example.qrentrancereader.activities
 
 import android.content.Intent
-import android.content.IntentSender
-import android.graphics.Color
 import android.hardware.Camera
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import com.example.qrentrancereader.databinding.ActivityQrreadBinding
@@ -18,14 +14,12 @@ import com.example.qrentrancereader.utils.QRControlResultHandler
 import com.google.android.material.snackbar.Snackbar
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
-import org.json.JSONObject
 import java.util.*
 
 class QRReadActivity : BaseActivity(), QRControlResultHandler {
     private lateinit var binding: ActivityQrreadBinding
     private var lastText = ""
     private lateinit var qrControlHandler : QRControlHandler
-    private var progressBarTimer: CountDownTimer? = null
     private var guideTimer: CountDownTimer? = null
     private var currentStatus: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,14 +63,14 @@ class QRReadActivity : BaseActivity(), QRControlResultHandler {
 
     fun pause() {
         binding.barcodeScanner.pause()
-        Log.d("QRCONTROLCHANNEL", "pause called")
+        //Log.d("QRCONTROLCHANNEL", "pause called")
         lastText = "" // reset last read QR Info
         binding.coverView.visibility = View.VISIBLE
     }
 
     fun resume() {
         binding.barcodeScanner.resume()
-        Log.d("QRCONTROLCHANNEL", "resume called")
+        //Log.d("QRCONTROLCHANNEL", "resume called")
         binding.coverView.visibility = View.INVISIBLE
     }
 
