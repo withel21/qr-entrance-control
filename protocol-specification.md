@@ -29,9 +29,9 @@
   - That is, response with same command and token means that the request is successfully handed to target app.(즉, 동일한 커맨드와 token에 대한 응답은 성공적으로 요청 정보가 target app에 전달되었음을 의미합니다.)
   - Otherwise, error command is the responsed from SIS, generally.(그렇지 않다면 error 커맨드가 일반적으로 SIS로 부터 전달됩니다.)
   - Command List
-    * CREATE_CHANNEL('create-channel') : ECA requests to make a channel to SIS(ECA가 SIS에 채널 생성을 요청합니다.)
+    * **CREATE_CHANNEL**('create-channel') : ECA requests to make a channel to SIS(ECA가 SIS에 채널 생성을 요청합니다.)
       - request
-      ```json
+      ```javascript
       {
         token: string,
         eventId: string,
@@ -39,7 +39,7 @@
       }      
       ```
       - response
-      ```json
+      ```javascript
       {
         token: string,      // the same one of request
         eventId: string,  
@@ -47,9 +47,9 @@
         channelId: string,  // channel id to be created
       }
       ```
-    * JOIN_CHANNEL('join-channel') : QRA reqeusts to join in the channel which the designated ECA made.(QRA가 지정된 ECA가 만든 채널 조인을 요청합니다.)
+    * **JOIN_CHANNEL**('join-channel') : QRA reqeusts to join in the channel which the designated ECA made.(QRA가 지정된 ECA가 만든 채널 조인을 요청합니다.)
       - request
-      ```json
+      ```javascript
       {
         token: string,
         eventId: string,
@@ -58,7 +58,7 @@
       }
       ```
       - response
-      ```json
+      ```javascript
       {
         token: string,      // the same one of request
         eventId: string,
@@ -67,9 +67,9 @@
         channelId: string,
       }
       ```
-    * CONTROL_QR_READER('control-qr-reader') : ECA requests to control the QRA to change status and show message.(ECA가 QRA에 상태를 바꾸거나, 메시지를 보여주는 제어를 요청합니다.)
+    * **CONTROL_QR_READER**('control-qr-reader') : ECA requests to control the QRA to change status and show message.(ECA가 QRA에 상태를 바꾸거나, 메시지를 보여주는 제어를 요청합니다.)
       - request
-      ```json
+      ```javascript
       {
         token: string,
         eventId: string,
@@ -82,7 +82,7 @@
       }
       ```
       - response
-      ```json
+      ```javascript
       {
         token: string,            // the same one of request
         eventId: string,
@@ -90,9 +90,9 @@
         targetQrStatus: string,   // sent status
       }
       ```
-    * QR_STATUS_UPDATE('qr-status-update') : QRA requests to notify the status change to ECA.(QRA가 상태변경을 ECA에 알리기 위해 요청합니다.)
+    * **QR_STATUS_UPDATE**('qr-status-update') : QRA requests to notify the status change to ECA.(QRA가 상태변경을 ECA에 알리기 위해 요청합니다.)
       - request
-      ```json
+      ```javascript
       {
         token: string,
         eventId: string,
@@ -102,7 +102,7 @@
       }
       ```
       - response
-      ```json
+      ```javascript
       {
         token: string,          // the same one of request
         eventId: string,
@@ -110,9 +110,9 @@
         state: string,          // sent status
       }
       ```
-    * LEAVE_CHANNEL('leave-channel') : QRA requests to leave the channel.(QRA가 채널에서 나오기 위해 요청합니다.)
+    * **LEAVE_CHANNEL**('leave-channel') : QRA requests to leave the channel.(QRA가 채널에서 나오기 위해 요청합니다.)
       - request
-      ```json
+      ```javascript
       {
         token: string,
         eventId: string,
@@ -120,16 +120,16 @@
       }
       ```
       - response
-      ```json
+      ```javascript
       {
         token: string,          // the same one of request
         eventId: string,
         appId: string,          // QRA's id
       }
       ```
-    * DESTROY_CHANNEL('destroy-channel' : ECA requests to destroy the channel.(ECA가 채널의 파괴를 위해 요청합니다.)
+    * **DESTROY_CHANNEL**('destroy-channel' : ECA requests to destroy the channel.(ECA가 채널의 파괴를 위해 요청합니다.)
       - request
-      ```json
+      ```javascript
       {
         token: string,
         eventId: string,
@@ -137,18 +137,18 @@
       }      
       ```
       - response
-      ```json
+      ```javascript
       {
         token: string,          // the same one of request
         eventId: string,  
         appId: string,          // ECA's id
       }
       ```
-    * ERROR('error') 
+    * **ERROR**('error') 
       - if there is an error for any command, error command is sent to requester.(어떤 커맨드던지 에러가 있으면, 에러 커맨드가 requester에 보내집니다.)
       - When ECA/QRA wants to send its error to peer, this command can be used.(ECA/QRA가 발생한 에러를 상대방에게 보내고 싶을 때 보낼 수 있다)
       - request & response
-      ```json
+      ```javascript
       {
         token: string,      // the same one of request
         eventId: string,
