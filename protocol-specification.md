@@ -27,7 +27,7 @@
   - Generally, the response of an event, the same event is used, but the response can be identified by a token.(일반적으로 이벤트에 대한 응답은 같은 이벤트로 응답됩니다만, 응답은 token에 의해 식별가능합니다)
   - Usually, requested information is sent to target app and the response is not from target app but from SIS.(보통, 요청된 정보는 타겟 앱으로 전송되지만, 응답은 SIS가 줍니다.)
   - That is, response with same command and token means that the request is successfully handed to target app.(즉, 동일한 커맨드와 token에 대한 응답은 성공적으로 요청 정보가 target app에 전달되었음을 의미합니다.)
-  - Otherwise, error command is the responsed from SIS, generally.(그렇지 않다면 error 커맨드가 일반적으로 SIS로 부터 전달됩니다.)
+  - Otherwise, error command is sent as the response from SIS, generally.(그렇지 않다면 error 커맨드가 일반적으로 SIS로 부터 전달됩니다.)
   - Command List
     * **CREATE_CHANNEL**('create-channel') : ECA requests to make a channel to SIS(ECA가 SIS에 채널 생성을 요청합니다.)
       - request
