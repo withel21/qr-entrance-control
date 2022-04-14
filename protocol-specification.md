@@ -6,12 +6,12 @@
 
 ### Entities
   The system consists of three entities(시스템은 세 개의 엔터티로 구성되어 있습니다.)
-  1. QR Reader(QRA)
-    * Reading QR and presenting message for entrance control(QR을 읽고, 입구 제어를 위한 메시지를 보여줍니다.)
-  2. Entrance Control WebApp(ECA)
-    * As an operation tool, control the entrance based on QR info and the site situation.(운영 툴로써, QR 정보와 현장 상황에 따라 입구를 제어합니다.)
-  3. Server(SIS)
-    * Mediator of communication between QR Reader and Entrance Control WebaApp(QR Reader와 Entrance Control WebApp의 중개자)
+  1. QR Reader(QRA)  
+    - Reading QR and presenting message for entrance control(QR을 읽고, 입구 제어를 위한 메시지를 보여줍니다.)
+  2. Entrance Control WebApp(ECA)  
+    - As an operation tool, control the entrance based on QR info and the site situation.(운영 툴로써, QR 정보와 현장 상황에 따라 입구를 제어합니다.)
+  3. Server(SIS)  
+    - Mediator of communication between QR Reader and Entrance Control WebaApp(QR Reader와 Entrance Control WebApp의 중개자)
 
 ### 
   - Socket.io : protocol is implemented on socket.io.(그리고 protocol은 socket.io 위에 구현되어 있습니다.)
