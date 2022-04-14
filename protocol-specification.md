@@ -1,6 +1,6 @@
 ## Abstract
-  - Explain the protocol which is used in the communication for QR reader control
-  - QR 리더 컨트롤을 위한 통신에서 사용된 프로토몰을 설명합니다.
+  Explain the protocol which is used in the communication for QR reader control  
+  QR 리더 컨트롤을 위한 통신에서 사용된 프로토몰을 설명합니다.
 
 ## Advance in Knowlede
 
@@ -13,7 +13,7 @@
   3. Server(SIS)  
     - Mediator of communication between QR Reader and Entrance Control WebaApp(QR Reader와 Entrance Control WebApp의 중개자)
 
-### 
+### Terminology
   - Socket.io : protocol is implemented on socket.io.(그리고 protocol은 socket.io 위에 구현되어 있습니다.)
   - Channel : The mapping of QRA and ECA is managed as the concept of channel in SIS.(QRA와 ECA의 mapping은 채널의 개념으로 SIS에서 관리합니다.)
     * There is ONLY 1 channel for 1 ECA.(하나의 ECA에 대하여 하나의 채널만 생성합니다.)
