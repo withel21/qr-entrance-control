@@ -3,6 +3,7 @@
   - QR code reader on mobile(android) <- MAIN : controlled by web interface.(socket.io)
   - web interface : developed by react as a prototype -> No UI/UX considered
   - socket.io server : developed by Node.js -> No data validation is done
+- [protocol specification](https://github.com/withel21/qr-entrance-control/blob/main/protocol-specification.md)
 
 ## Source Code Structure Overview
 - QR Code Reader
