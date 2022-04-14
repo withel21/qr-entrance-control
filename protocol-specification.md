@@ -2,7 +2,7 @@
   Explain the protocol which is used in the communication for QR reader control  
   QR 리더 컨트롤을 위한 통신에서 사용된 프로토몰을 설명합니다.
 
-## Advance in Knowlede
+## Advance in Knowledge
 
 ### Entities
   The system consists of three entities(시스템은 세 개의 엔터티로 구성되어 있습니다.)
